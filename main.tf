@@ -22,7 +22,6 @@ variable "awscertarn" {
 variable "hostingzoneid"{
  type = string
  description = "Route 53 Hosting Zone ID for A record"
- default = "Z09358402UHBKU59BTIHX"
 }
 
 
