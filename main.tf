@@ -57,6 +57,7 @@ resource "aws_s3_bucket_object" "file" {
   bucket = "${aws_s3_bucket.www.bucket}"
   source = "source/hello_world_take_home.html"
   key = "hello_world_take_home.html"
+  content_type = "text/html"
 }
 
 
