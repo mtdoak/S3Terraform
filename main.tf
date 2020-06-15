@@ -22,6 +22,13 @@ variable "awscertarn" {
 variable "hostingzoneid"{
  type = string
  description = "Route 53 Hosting Zone ID for A record"
+ default = "Z09358402UHBKU59BTIHX"
+}
+
+variable "indexfilename"{
+  type = string
+  description = "Filename of the index located inside of source folder"
+
 }
 
 
@@ -46,7 +53,7 @@ resource "aws_s3_bucket" "www" {
 POLICY
 
   website {
-    index_document = "hello_world_take_home.html"
+    index_document = "${var.indexfilename}"
   }
 }
 
@@ -54,8 +61,8 @@ POLICY
 
 resource "aws_s3_bucket_object" "file" {
   bucket = "${aws_s3_bucket.www.bucket}"
-  source = "source/hello_world_take_home.html"
-  key = "hello_world_take_home.html"
+  source = "source/${var.indexfilename}"
+  key = "${var.indexfilename}"
   content_type = "text/html"
 }
 
@@ -76,7 +83,7 @@ resource "aws_cloudfront_distribution" "www_distribution" {
   }
 
   enabled 	=  true
-  default_root_object = "hello_world_take_home.html"
+  default_root_object = "${var.indexfilename}"
 
 
    default_cache_behavior {
@@ -116,6 +123,7 @@ resource "aws_route53_record" "www" {
   zone_id = "${var.hostingzoneid}"
   name    = "${var.www_domain_name}"
   type    = "A"
+  
 
   alias {
     name                   = "${aws_cloudfront_distribution.www_distribution.domain_name}"
